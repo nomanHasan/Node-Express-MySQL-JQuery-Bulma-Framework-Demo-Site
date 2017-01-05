@@ -1,0 +1,60 @@
+<% include templates/head %>
+
+    <div class="columns">
+    <div class="column is-3"></div>
+        <div class="column is-6">
+            <form method="POST" action="/foods">
+              <% if(food) { %>
+                <label class="label">Food Name : </label>
+                <p class="control">
+                    <input class="input" id="name" name="name" type="text" value="<%=food.name%>" placeholder="Food Name">
+                </p>
+                <input class="input" id="oldName" name="oldName" type="hidden" value="<%=food.name%>" placeholder="Food Name">
+
+                <label class="label">Food Type : </label>
+                <p class="control">
+                    <input class="input" id="type" name="type" type="text" value="<%=food.type%>" placeholder="Food Type">
+                </p>
+
+                <label class="label">Quantity : </label>
+                <p class="control">
+                    <input class="input" id="quantity" name="quantity" type="number" value="<%=food.quantity%>" placeholder="Food Quantity">
+                </p>
+
+                <label class="label">Price : </label>
+                <p class="control">
+                    <input class="input" id="price" name="price" type="number" value="<%=food.price%>" placeholder="Food Price">
+                </p>
+                <% }else {  %>
+                <label class="label">Food Name : </label>
+                <p class="control">
+                    <input class="input" id="name" name="name" type="text" placeholder="Food Name">
+                </p>
+                <label class="label">Food Type : </label>
+                <p class="control">
+                    <input class="input" id="type" name="type" type="text" placeholder="Food Type">
+                </p>
+
+                <label class="label">Quantity : </label>
+                <p class="control">
+                    <input class="input" id="quantity" name="quantity" type="number" placeholder="Food Quantity">
+                </p>
+
+                <label class="label">Price : </label>
+                <p class="control">
+                    <input class="input" id="price" name="price" type="number" placeholder="Food Price">
+                </p>
+                <% } %>
+                    <a class="button is-info is-outlined" href="/foods">Food List</a>
+                    <%if(food) { %>
+                      <input type="submit" class="button is-success is-outlined" value="Save Change"></input>
+                    <%} else { %>
+                      <input type="submit" class="button is-success is-outlined" value="Add Food"></input>
+                    <% } %>
+            </form>
+        </div>
+    </div>
+
+
+
+    <% include templates/footer %>

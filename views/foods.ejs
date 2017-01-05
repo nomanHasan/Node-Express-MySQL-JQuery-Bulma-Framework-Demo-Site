@@ -1,0 +1,35 @@
+<% include templates/head %>
+
+    <div class="columns">
+    <div class="column is-3"></div>
+    <div class="column is-6" >
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Food Name </th>
+        <th>Food Quantity </th>
+        <th>Food Price </th>
+        <th>Options </th>
+      </tr>
+    </thead>
+      <% if(foods) { %>
+      <tbody>  
+    <% for(var i =0; i< foods.length; i++ ) { %>
+      <tr>
+        <td><a href="/foods/<%=foods[i].name%>"><%=foods[i].name %></a></td>
+        <td><a href="/foods/<%=foods[i].name%>"><%=foods[i].quantity %> <i><%=foods[i].type%></i> </a></td>
+        <td><a href="/foods/<%=foods[i].name%>"><%=foods[i].price %></a></td>
+        <td>
+          <a href="/foods/<%=foods[i].name%>" class="button is-info is-outlined">Edit</a>
+        </td>
+      </tr>
+    <% } %>
+    </tbody>
+    <% } %>
+    </table>
+    <a href="/" class="button is-info is-outlined">Back to Home</a>
+    <a href="/foods/create" class="button is-success is-outlined">Add Food</a>
+    </div>
+  </div>
+
+<% include templates/footer %>

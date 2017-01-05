@@ -1,0 +1,149 @@
+<% include templates/head %>
+
+  <script>
+    var orders = [];
+    var totalPayment = 0;
+  </script>
+
+    <div class="columns">
+    <div class="column is-2"></div>
+    <div class="column is-5" >
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Food Name </th>
+        <th>Food Price </th>
+        <th>Food Quantity </th>
+        <th>Options </th>
+      </tr>
+    </thead>
+      <% if(foods) { %>
+      <tbody>  
+    <% for(var i =0; i< foods.length; i++ ) { %>
+      <%var _name = foods[i].name.replace(" ","_")%>
+      <tr id="<%=_name%>">
+        <td id="<%=_name%>_name"><%=foods[i].name %></td>
+        <td id="<%=_name%>_price"><%=foods[i].price %></td>
+        <td><input type="number" id="<%=_name%>_quantity" name="quantity"></td>
+        <td>
+          <a href="/foods/<%=foods[i].name%>" class="button is-success is-outlined">Order</a>
+        </td>
+        <script>
+      $("#<%=_name%>_quantity").change(function(){
+        var name = "<%=foods[i].name%>";
+        var price = Number($("#<%=_name%>_price").text());
+        var quantity = Number($(this).val());
+        var total = price * quantity;
+
+        // console.log("Price = "+ price);
+        // console.log("input Changed "+quantity);
+        // console.log("Total Price : "+ total);
+
+        var el = $("#cart").find("#<%=_name%>");
+        console.log(el);
+
+        var e = "<tr id=\"<%=_name%>\">"+
+          "<td id=\"<%=_name%>_name\"><%=foods[i].name%></td>" +
+          "<td id=\"<%=_name%>_quantity\">"+quantity+"</td>" +
+          "<td id=\"<%=_name%>_total\">"+total+"</td>" +
+          +"</tr>";
+
+        if(total > 0){
+            if(el.length==0){
+            $("#cart").append(e);
+          }else{
+            el.find("#<%=_name%>_total").text(total);
+            el.find("#<%=_name%>_quantity").text(quantity);
+          }
+          console.log(name);
+
+          var found = false;
+          for(var i =0; i< orders.length; i++){
+            if(orders[i].name == name ){
+              orders[i].quantity = quantity;
+              orders[i].total = total;
+              found = true;
+              break;
+            }
+          }
+
+          if(!found){
+            orders.push({name, quantity, total });
+          }
+          console.log(orders);
+          
+        }else{
+          el.remove();
+
+          var index;
+          for(var i =0; i< orders.length; i++){
+            if(orders[i].name == name ){
+              index = i ;
+              break;
+            }
+          }
+          console.log(index);
+          if(index>-1){
+            orders.splice(index, 1);
+          }
+        }
+
+        //Calculating the All Total of the cart
+        totalPayment = 0;
+        for(var i =0; i< orders.length; i++){
+            totalPayment+=orders[i].total;
+        }
+
+        $("#all_total").text("All Total : "+totalPayment + " ৳");
+
+
+      });
+    </script>
+      </tr>
+    <% } %>
+    </tbody>
+    <% } %>
+    </table>
+    <a href="/" class="button is-info is-outlined">Back to Home</a>
+    </div>
+    <div class="column is-1"></div>
+    <div class="column is-4">
+      <div class="panel">
+        <div class="panel-heading">
+          <h3 class="title">Ordered Foods</h3>
+        </div>
+        <div class="panel-block">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Food Name</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="cart">
+              
+            </tbody>
+          </table>
+
+          <label for="" id="all_total" class="label is-info">All Total : 0 ৳</label>
+          <a class="button is-success is-outlined" id="submit">Order Food</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $("#submit").click(function(){
+      console.log("Submitting");
+      $.post("/order", orders, function(data){
+        
+        if(data.success){
+          window.location.replace("/");
+        }
+        
+      });
+    });
+  </script>
+
+<% include templates/footer %>
