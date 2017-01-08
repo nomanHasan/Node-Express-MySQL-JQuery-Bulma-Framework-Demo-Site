@@ -15,14 +15,25 @@
       <% if(foods) { %>
       <tbody>  
     <% for(var i =0; i< foods.length; i++ ) { %>
+      <%var _name = foods[i].name.replace(" ","_")%>
       <tr>
-        <td><a href="/foods/<%=foods[i].name%>"><%=foods[i].name %></a></td>
-        <td><a href="/foods/<%=foods[i].name%>"><%=foods[i].quantity %> <i><%=foods[i].type%></i> </a></td>
-        <td><a href="/foods/<%=foods[i].name%>"><%=foods[i].price %></a></td>
-        <td>
+        <td><a href="/foods/<%=_name%>"><%=foods[i].name %></a></td>
+        <td><a href="/foods/<%=_name%>"><%=foods[i].quantity %> <i><%=foods[i].type%></i> </a></td>
+        <td><a href="/foods/<%=_name%>"><%=foods[i].price %></a></td>
+        <td id="<%=_name%>_options">
           <a href="/foods/<%=foods[i].name%>" class="button is-info is-outlined">Edit</a>
         </td>
+        
       </tr>
+      <script>
+        
+        $(window).load(function(){
+          var quantity = <%=foods[i].quantity%>;
+          var tper = quantity / 10;
+          tper = Math.round(tper);
+          $("#<%=_name%>_options").append("<a href=\"/foods/<%=foods[i].name%>\" class=\"button is-info is-outlined\">Increase By "+tper+"</a>");
+        });  
+      </script>
     <% } %>
     </tbody>
     <% } %>
