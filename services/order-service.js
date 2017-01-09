@@ -16,30 +16,99 @@ exports.demo = function () {
 }
 
 exports.getOrders = function (next) {
-    db.query('SELECT * FROM `order`', function (err, result) {
-        console.log(result);
-        return next(result);
+    db.query('SELECT * FROM `orders`', function (err, orders) {
+        console.log(orders);
+        var count = orders.length;
+        orders.forEach(function(element, index, array){
+            var query = 'select * from `list` where id='+element.list_id ;
+            console.log(query);
+            db.query(query, function(err, list){
+                if(err){
+                    console.log(err);
+                    return next(err, null);
+                }
+                console.log(index);
+                console.log(list);
+                orders[index].foods = list;
+                setTimeout(function(){
+                    count--;
+                    if(count==0){
+                        console.log(orders);
+                        return next(null, orders);
+                    }
+                });
+            });
+        });
     });
 }
 
-exports.getFood = function (name, next) {
-    db.query('SELECT * FROM `food` where name =\''+name+'\'', function (err, result) {
+exports.getOrder = function (i, next) {
+    var id = Number(i);
+    db.query('SELECT * FROM `order` where id =\'' + id + '\'', function (err, result) {
         console.log(result);
         return next(result[0]);
     });
 }
 
-exports.updateFood = function (name, food, next) {
-    var queryString = 'update `food` SET name=\''+food.name+'\', type=\''+food.type+'\', quantity='+food.quantity+', price='+food.price+' where name =\''+name+'\'';
-    console.log(queryString);
-    db.query(queryString, function (err, result) {
+exports.getListID = function(next){
+    db.query('SELECT max(id) as id FROM `list` ', function (err, result) {
+        console.log("MAX");
         console.log(result);
-        return next(result[0]);
+        var id;
+        if(result[0].id=="null"){
+            console.log("NULL");
+            id = 1;
+        }else{
+            console.log("NOTNU");
+            id = Number(result[0].id);
+            id ++;
+        }
+        return next(id);
     });
 }
 
-exports.addFood = function (food, next) {
-    db.query('insert into `food` (name, type, quantity, price) VALUES(\''+food.name+'\', \''+food.type+'\', '+food.quantity+', '+food.price+')', function (err, result) {
+exports.addList = function (id, foods, next) {
+    var i = 0;
+    console.log(foods);
+    var counter = foods.length;
+    console.log(id);
+    foods.forEach(function (food, index, array) {
+        i++;
+        var query = 'insert into `list` (id, food, quantity ) VALUES('+id+', \'' + food.name + '\', ' + food.quantity + ')';
+        console.log(query);
+        db.query(query, function (err, result) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            setTimeout(function(){
+              counter --;
+              if(counter ==0){
+                  return next(null);
+              }  
+            })
+        });
+    });
+
+}
+
+exports.getId = function (next) {
+    console.log("GI");
+    db.query('select last_insert_id() as id', function (err, result) {
+        if (err) {
+            console.log(err);
+            return next(err, null);
+        }
+        console.log(result);
+        console.log(result[0].id);
+        return next(null, result[0].id);
+    });
+}
+
+exports.addOrder = function (list_id, total , next) {
+    var query = 'insert into `orders` (date, list_id, total) VALUES(NOW() ,' + list_id + ' , ' + total + ')';
+    console.log(query);
+    db.query(query, function (err, result) {
         console.log(result);
         return next(result[0]);
     });

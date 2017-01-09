@@ -38,6 +38,15 @@ exports.updateFood = function (name, food, next) {
     });
 }
 
+exports.deleteFood = function (name, next) {
+    db.query('delete FROM `food` where name =\''+name+'\'', function (err, result) {
+        console.log(result);
+        return next(result[0]);
+    });
+}
+
+
+
 exports.addFood = function (food, next) {
     db.query('insert into `food` (name, type, quantity, price) VALUES(\''+food.name+'\', \''+food.type+'\', '+food.quantity+', '+food.price+')', function (err, result) {
         console.log(result);

@@ -19,9 +19,10 @@
       <tr>
         <td><a href="/foods/<%=_name%>"><%=foods[i].name %></a></td>
         <td><a href="/foods/<%=_name%>"><%=foods[i].quantity %> <i><%=foods[i].type%></i> </a></td>
-        <td><a href="/foods/<%=_name%>"><%=foods[i].price %></a></td>
+        <td><a href="/foods/<%=_name%>"><%=foods[i].price %> <i> Tk</i></a></td>
         <td id="<%=_name%>_options">
           <a href="/foods/<%=foods[i].name%>" class="button is-info is-outlined">Edit</a>
+          <a href="/foods/delete/<%=foods[i].name%>" class="button is-danger is-outlined">Delete</a>
         </td>
         
       </tr>

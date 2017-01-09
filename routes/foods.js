@@ -34,6 +34,14 @@ router.post('/', function (req, res, next) {
   });
 });
 
+router.get('/delete/:name', function (req, res, next) {
+  var name = req.params.name;
+  console.log(name);
+  var names = foodService.deleteFood(name, function (food) {
+    return res.redirect('/foods');
+  });
+});
+
 router.get('/:name', function (req, res, next) {
   var name = req.params.name;
   console.log(name);

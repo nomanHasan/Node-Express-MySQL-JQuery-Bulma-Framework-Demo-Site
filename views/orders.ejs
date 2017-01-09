@@ -1,0 +1,59 @@
+<% include templates/head %>
+
+    <script>
+    var orders = [];
+    var totalPayment = 0;
+    var vat = 0;
+</script>
+
+<div class="columns">
+    <div class="column is-2"></div>
+    <div class="column is-5">
+
+        <% for(var i=0; i< orders.length; i++) { %>
+            <div class="card">
+                <h4><label for="">ID: </label> <%=orders[i].id%></h4>
+                <h5><label for="">Date: </label> <%=orders[i].Date%></h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Quantity </th>
+                        </tr>
+                    </thead>
+                    <% var foods = orders[i].foods%>
+                    <% if(foods) { %>
+                        <tbody>
+                            <% for(var j =0; j< foods.length; j++ ) { %>
+                                    <tr >
+                                        <td >
+                                            <%=foods[j].food %>
+                                        </td>
+                                        <td><%=foods[j].quantity%></td>
+                                    </tr>
+                                    <% } %>
+                        </tbody>
+                        <% } %>
+                </table>
+                <h5><label for="">Total Cost: </label><%=orders[i].total%> Taka</h5>
+            </div>
+            <% } %>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    $("#submit").click(function () {
+        console.log("Submitting");
+        $.post("/order", { order: JSON.stringify(orders), total: totalPayment }, function (data) {
+
+            if (data.success) {
+                window.location.replace("/");
+            }
+
+        });
+    });
+</script>
+
+<% include templates/footer %>

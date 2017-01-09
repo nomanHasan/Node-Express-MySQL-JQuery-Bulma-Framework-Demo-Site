@@ -1,36 +1,4 @@
-<% include templates/head %>
-
-    <div class="columns is-mobile">
-        <div class="column is-half is-offset-one-quarter">
-            <div class="jumbotron">
-                <h2>Foods List</h2>
-            </div>
-
-            <% if(food) { %>
-                <label class="label">Food Name : </label>
-                <p class="control">
-                    <input class="input" type="text" placeholder="Food Name">
-                </p>
-                <label for="">Food Type : </label>
-                <h4>
-                    <%=food.type%>
-                </h4>
-
-                <label for="">Quantity : </label>
-                <h4>
-                    <%=food.quantity%>
-                </h4>
-
-                <label for="">Price : </label>
-                <h4>
-                    <%=food.price%>
-                </h4>
-                <% } %>
-                    <a href="/foods">Food List</a>
-                    <a href="/foods">Edit Food </a>
-        </div>
-    </div>
-
-
-
-    <% include templates/footer %>
+var names = orderService.getOrders(function (orders) {
+    var vm = { title: 'orders List ', orders: orders };
+    return res.render('orders', vm);
+  });

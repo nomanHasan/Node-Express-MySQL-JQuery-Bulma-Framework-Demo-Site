@@ -24,11 +24,8 @@
       <%var _name = foods[i].name.replace(" ","_")%>
       <tr id="<%=_name%>">
         <td id="<%=_name%>_name"><%=foods[i].name %></td>
-        <td id="<%=_name%>_price"><%=foods[i].price %></td>
+        <td > <p id="<%=_name%>_price"><%=foods[i].price %></p></td>
         <td><input type="number" id="<%=_name%>_quantity" name="quantity"></td>
-        <td>
-          <a href="/foods/<%=foods[i].name%>" class="button is-success is-outlined">Order</a>
-        </td>
         <script>
       $("#<%=_name%>_quantity").change(function(){
         var name = "<%=foods[i].name%>";
@@ -135,7 +132,7 @@
   <script>
     $("#submit").click(function(){
       console.log("Submitting");
-      $.post("/order", orders, function(data){
+      $.post("/order", {order: JSON.stringify(orders), total: totalPayment}, function(data){
         
         if(data.success){
           window.location.replace("/");
